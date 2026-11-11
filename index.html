@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5dce8">
+<link rel="manifest" href="manifest.json">
+<title>Class 9 Topper Tracker</title>
+<style>
+:root{--pink:#f4d8e5;--pink2:#fff2f7;--ink:#302631;--muted:#786b76;--line:#eadde5;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:#fff9fc;color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:24px 18px 18px;background:linear-gradient(135deg,#f8e2ec,#fdf2f7);border-bottom:1px solid var(--line)}
+.wrap{max-width:900px;margin:auto;padding:0 14px}h1{font-size:25px;margin:0 0 5px}h2{font-size:18px;margin:0 0 12px}p{margin:5px 0;color:var(--muted)}
+main{padding:16px 0 40px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 3px 12px #4c1c3a08;margin-bottom:12px}
+.metric{font-size:27px;font-weight:750}.small{font-size:12px;color:var(--muted)}
+.progress{height:9px;background:#f3eaf0;border-radius:99px;overflow:hidden;margin-top:8px}.bar{height:100%;background:#c978a0;width:0}
+button,input,select{font:inherit}button{border:0;border-radius:11px;padding:10px 13px;background:#633b54;color:white;cursor:pointer}
+button.secondary{background:#f5e8ef;color:#57394b}button:disabled{opacity:.5}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.task{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f3edf1}.task:last-child{border:0}
+.task input{margin-top:4px;accent-color:#b85f8b}.task label{flex:1}
+.subject{display:grid;grid-template-columns:1fr 75px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #f3edf1}
+input[type=number],input[type=date],input[type=text],select{width:100%;padding:9px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink)}
+textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:9px;padding:9px}
+.pill{font-size:12px;background:#f8eaf1;border-radius:99px;padding:5px 9px;color:#75445f}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(min-width:700px){.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="row"><div><h1>Class 9 Topper Tracker 🌷</h1><p>Karachi Board · Sindh Textbook · steady work, checked daily</p></div><span class="pill" id="today"></span></div>
+</div></header>
+<main class="wrap">
+<div class="grid">
+ <section class="card"><div class="small">TODAY'S COMPLETION</div><div class="metric" id="completion">0%</div><div class="progress"><div class="bar" id="completionBar"></div></div><p id="doneCount">0 of 5 tasks completed</p></section>
+ <section class="card"><div class="small">MATHEMATICS PRIORITY</div><div class="metric">Daily</div><p>Focused textbook practice + corrections. Keep it manageable.</p><span class="pill">Weakest subject focus</span></section>
+ <section class="card"><div class="small">TESTS LOGGED</div><div class="metric" id="testCount">0</div><p>Record scores and review mistakes.</p></section>
+</div>
+<div class="two">
+<section class="card">
+ <h2>Today's checklist</h2>
+ <div id="tasks">
+  <div class="task"><input type="checkbox" data-task="math"><label><b>Mathematics (40–50 min)</b><br><span class="small">Textbook questions, one weak concept, correct mistakes.</span></label></div>
+  <div class="task"><input type="checkbox" data-task="subject"><label><b>One rotating subject (25–35 min)</b><br><span class="small">Physics, Chemistry, Biology, English, Urdu, Islamiat or Computer.</span></label></div>
+  <div class="task"><input type="checkbox" data-task="recall"><label><b>Active recall (10 min)</b><br><span class="small">Close the book and write/say what you remember.</span></label></div>
+  <div class="task"><input type="checkbox" data-task="practice"><label><b>Exam-style practice (15 min)</b><br><span class="small">MCQs, numericals, diagrams or written answers.</span></label></div>
+  <div class="task"><input type="checkbox" data-task="mistakes"><label><b>Mistake + revision review (10 min)</b><br><span class="small">Fix errors and check topics due for revision.</span></label></div>
+ </div>
+ <p class="small">The checklist resets for a new date; your subject scores and logs stay saved on this device.</p>
+</section>
+<section class="card">
+ <h2>Subject progress</h2><p class="small">Enter your latest self-assessed progress (0–100%).</p>
+ <div id="subjects"></div>
+ <div class="progress"><div class="bar" id="subjectBar"></div></div><p id="subjectAvg" class="small">Average: 0%</p>
+</section>
+</div>
+<div class="two">
+<section class="card">
+ <h2>Tests & timed practice</h2>
+ <div class="row"><select id="testSubject"><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>English</option><option>Urdu</option><option>Islamiat</option><option>Computer</option></select><input id="testScore" type="number" min="0" max="100" placeholder="Score %"></div>
+ <p><input id="testNote" type="text" placeholder="Test / chapter (e.g. Maths Ex 3.2)"></p>
+ <button id="addTest">Save test</button><div id="testLog"></div>
+</section>
+<section class="card">
+ <h2>Spaced revision planner</h2>
+ <p class="small">Add a topic after learning it. Review after 1, 3, 7, 15 and 30 days.</p>
+ <input id="topic" type="text" placeholder="Topic / chapter name">
+ <p><input id="learnedDate" type="date"></p><button id="addTopic">Add topic</button>
+ <div id="revisionList"></div>
+</section>
+</div>
+<section class="card">
+ <div class="row"><h2>Weekly report</h2><button class="secondary" id="weekly">Generate report</button></div>
+ <div id="report" class="small">Your weekly summary will appear here using the activity saved on this device.</div>
+</section>
+<section class="card">
+ <h2>Daily reminder</h2>
+ <p>Reminder target: <b>7:45 PM (Pakistan time)</b>. Allow notifications while the app is open. Background reminders after the app is closed depend on your phone/browser and hosting setup; ChatGPT will also send your daily check-in.</p>
+ <button class="secondary" id="notify">Enable browser notifications</button> <span class="small" id="notifyState"></span>
+</section>
+<footer>Progress is stored locally in this browser on this device. It is not a guaranteed exam rank predictor. Sleep and consistency matter.</footer>
+</main>
+<script>
+const subjects=['Mathematics','Physics','Chemistry','Biology','English','Urdu','Islamiat','Computer'];
+const $=id=>document.getElementById(id);
+const key='class9TopperTrackerV1';
+let data=JSON.parse(localStorage.getItem(key)||'{}');
+data.progress=data.progress||{};data.tests=data.tests||[];data.topics=data.topics||[];data.days=data.days||{};
+const today=new Date().toLocaleDateString('en-CA');
+$('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
+function save(){localStorage.setItem(key,JSON.stringify(data));}
+function day(){data.days[today]=data.days[today]||{};return data.days[today];}
+function renderTasks(){
+ document.querySelectorAll('[data-task]').forEach(el=>{el.checked=!!day()[el.dataset.task];el.onchange=()=>{day()[el.dataset.task]=el.checked;save();renderTasks();};});
+ const n=Object.values(day()).filter(Boolean).length,p=Math.round(n/5*100);
+ $('completion').textContent=p+'%';$('completionBar').style.width=p+'%';$('doneCount').textContent=n+' of 5 tasks completed';
+}
+function renderSubjects(){
+ $('subjects').innerHTML=subjects.map(s=>`<div class="subject"><label>${s}</label><input aria-label="${s} progress" type="number" min="0" max="100" value="${data.progress[s]??0}" data-sub="${s}"></div>`).join('');
+ document.querySelectorAll('[data-sub]').forEach(el=>el.onchange=()=>{data.progress[el.dataset.sub]=Math.max(0,Math.min(100,+el.value||0));save();renderSubjects();});
+ const avg=Math.round(subjects.reduce((a,s)=>a+(+data.progress[s]||0),0)/8);
+ $('subjectAvg').textContent='Average: '+avg+'%';$('subjectBar').style.width=avg+'%';
+}
+function renderTests(){
+ $('testCount').textContent=data.tests.length;
+ $('testLog').innerHTML=data.tests.slice(-5).reverse().map(t=>`<p class="small">${t.date} · <b>${t.subject}</b> · ${t.score}% · ${t.note}</p>`).join('');
+}
+function renderTopics(){
+ $('revisionList').innerHTML=data.topics.map((t,i)=>{
+  const due=[1,3,7,15,30].map(d=>{let dt=new Date(t.date+'T12:00:00');dt.setDate(dt.getDate()+d);return {d,date:dt.toLocaleDateString(),due:dt.toISOString().slice(0,10)<=today};});
+  return `<div class="task"><div style="flex:1"><b>${t.name}</b><div class="small">Review: ${due.map(x=>x.d+'d '+(x.due?'●':'○')).join(' · ')}</div></div><button class="secondary" data-del="${i}">Remove</button></div>`;
+ }).join('');
+ document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{data.topics.splice(+b.dataset.del,1);save();renderTopics();});
+}
+$('addTest').onclick=()=>{let score=+$('testScore').value;if(!Number.isFinite(score)||score<0||score>100){alert('Enter a score from 0 to 100.');return;}data.tests.push({subject:$('testSubject').value,score,note:$('testNote').value||'Practice test',date:today});save();$('testScore').value='';$('testNote').value='';renderTests();};
+$('addTopic').onclick=()=>{if(!$('topic').value.trim())return;data.topics.push({name:$('topic').value.trim(),date:$('learnedDate').value||today});save();$('topic').value='';renderTopics();};
+$('weekly').onclick=()=>{
+ const last=new Date();last.setDate(last.getDate()-6);const since=last.toLocaleDateString('en-CA');
+ const recent=Object.entries(data.days).filter(([d])=>d>=since).reduce((a,[,v])=>a+Object.values(v).filter(Boolean).length,0);
+ const avg=Math.round(subjects.reduce((a,s)=>a+(+data.progress[s]||0),0)/8);
+ const tests=data.tests.filter(t=>t.date>=since);const mean=tests.length?Math.round(tests.reduce((a,t)=>a+t.score,0)/tests.length):'No tests logged';
+ $('report').innerHTML=`<b>Last 7 days</b><br>Checklist tasks completed: ${recent}<br>Subject progress average: ${avg}%<br>Tests logged: ${tests.length}<br>Average test score: ${mean}${typeof mean==='number'?'%':''}<br>Topics in revision planner: ${data.topics.length}<br><br><b>Next priorities</b><br>1. Keep Mathematics practice daily and redo errors.<br>2. Give extra time to the subject with the lowest progress.<br>3. Complete any overdue 1/3/7/15/30-day revision.`;
+};
+$('notify').onclick=async()=>{if(!('Notification'in window)){$('notifyState').textContent='Notifications are not supported in this browser.';return;}let p=await Notification.requestPermission();$('notifyState').textContent=p==='granted'?'Notifications enabled while the app can run.':'Permission not granted.';};
+function checkReminder(){
+ const now=new Date(),stamp=now.toLocaleDateString('en-CA');
+ if(now.getHours()===19&&now.getMinutes()===45&&localStorage.getItem('remindedOn')!==stamp&&'Notification'in window&&Notification.permission==='granted'){
+  new Notification('Class 9 study check-in',{body:'Maths first, one rotating subject, active recall and mistake review. Keep it realistic.'});
+  localStorage.setItem('remindedOn',stamp);
+ }
+}
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+renderTasks();renderSubjects();renderTests();renderTopics();setInterval(checkReminder,30000);
+</script>
+</body></html>

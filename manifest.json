@@ -1,0 +1,16 @@
+{
+  "name": "Class 9 Topper Tracker",
+  "short_name": "Topper Tracker",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff9fc",
+  "theme_color": "#f5dce8",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
